@@ -37,7 +37,7 @@ jobs:
       ROLE_NAME: ${{ secrets.ROLE_NAME }}
       ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
 
-  # Deploy application to Kubernetes
+  # Deploy application to Kubernetes cluster Using Helm
   deploy:
     needs: [build-and-push] 
     if: github.ref == 'refs/heads/master'
