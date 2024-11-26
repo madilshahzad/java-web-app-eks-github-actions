@@ -22,7 +22,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: 17 # Update based on your project's Java version
+          java-version: 21 # Updated to Java 21
           distribution: temurin
 
       # Step 3: Run Spring Boot Tests
