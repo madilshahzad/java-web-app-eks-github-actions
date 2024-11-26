@@ -1,0 +1,89 @@
+name: Reusable Workflow - Build and Push Docker Images with Incremental Tags
+
+on:
+  workflow_call:
+    secrets:
+      AWS_ACCOUNT_ID:
+        description: AWS Account ID
+        required: true
+      AWS_REGION:
+        description: AWS Region
+        required: true
+      ROLE_NAME:
+        description: Role Name
+        required: true
+      APP_NAME:
+        description: Application Name
+        required: true
+      ECR_REPOSITORY:
+        description: ECR Repository Name
+        required: true
+    inputs:
+      DOCKERFILE_PATH:
+        description: Path to the Dockerfile
+        required: false
+        default: "./Dockerfile"
+      CONTEXT_PATH:
+        description: Docker build context
+        required: false
+        default: "."
+    outputs:
+      IMAGE_TAG_DEPLOY:
+        description: Image Tag to be deployed
+        value: ${{ jobs.build_push_docker.outputs.IMAGE_TAG }}
+
+jobs:
+  build_push_docker:
+    outputs:
+      IMAGE_TAG: ${{ steps.image_tag.outputs.TAG }}
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout Code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # AWS Authentication
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.ROLE_NAME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # Log in to Amazon ECR
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # Get the Latest Image Tag from ECR
+      - name: Get the latest tag
+        id: latest-tag
+        run: |
+          LATEST_TAG=$(aws ecr describe-images \
+            --repository-name ${{ secrets.ECR_REPOSITORY }} \
+            --region ${{ secrets.AWS_REGION }} \
+            --query 'sort_by(imageDetails,&imagePushedAt)[-1].imageTags[0]' \
+            --output text)
+          if [ "$LATEST_TAG" == "None" ]; then
+            TAG="v1"
+          else
+            TAG="v$((${LATEST_TAG#v} + 1))"
+          fi
+          echo "TAG=$TAG" >> $GITHUB_ENV
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      # Set Image Tag
+      - name: Set Image Tag
+        id: image_tag
+        run: echo "TAG=${{ env.TAG }}" >> $GITHUB_OUTPUT
+
+      # Build and Push Docker Image
+      - name: Build and Push Docker Image to ECR
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ inputs.CONTEXT_PATH }}
+          file: ${{ inputs.DOCKERFILE_PATH }}
+          push: true
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ env.TAG }}

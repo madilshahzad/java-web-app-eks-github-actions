@@ -1,4 +1,4 @@
-name: Main Build Workflow
+name: Main Workflow
 
 on:
   push:
@@ -6,32 +6,17 @@ on:
       - main
   pull_request:
     branches:
-      - feature/*
+        - feature/*
 
 jobs:
-  build-image:
-    uses: ./.github/workflows/templates/build-image.yml
+  build_and_push:
+    uses: ./.github/workflows/templates/build-and-push-ecr.yml
     with:
-      image_name: "javaApp:latest"
-      dockerfile_path: "./Dockerfile"
-      context_path: "."
-
-#   deploy-application:
-#     needs: build-image
-#     uses: ./.github/workflows/templates/deploy-application.yml
-#     with:
-#       server_ip: "192.168.1.100"
-#       ssh_user: "deploy_user"
-#       ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-#   provision-infrastructure:
-#     uses: ./.github/workflows/templates/provision-infra.yml
-#     with:
-#       terraform_directory: "./terraform"
-
-#   kubernetes-deployment:
-#     needs: build-image
-#     uses: ./.github/workflows/templates/deploy-k8s.yml
-#     with:
-#       kubeconfig: ${{ secrets.KUBECONFIG }}
-#       manifest_path: "./k8s/deployment.yaml"
+      DOCKERFILE_PATH: "./Dockerfile"
+      CONTEXT_PATH: "./app"
+      ECR_REPOSITORY: "my-ecr-repo"
+    secrets:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      ROLE_NAME: ${{ secrets.ROLE_NAME }}
+      APP_NAME: "my-app"
