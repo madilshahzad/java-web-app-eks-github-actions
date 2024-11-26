@@ -39,7 +39,8 @@ jobs:
 
     steps:
       # Checkout Code
-      - uses: ./.github/workflows/checkout.yml
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
       # Extract Application Name from pom.xml
       - name: Get Application Name from pom.xml
