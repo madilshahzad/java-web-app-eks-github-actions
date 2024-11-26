@@ -1,4 +1,4 @@
-name: Reusable Workflow - Build and Push Docker Images with Incremental Tags
+name: Reusable Workflow - Build and Push Docker Images
 
 on:
   workflow_call:
@@ -12,9 +12,6 @@ on:
       ROLE_NAME:
         description: Role Name
         required: true
-      APP_NAME:
-        description: Application Name
-        required: true
       ECR_REPOSITORY:
         description: ECR Repository Name
         required: true
@@ -23,10 +20,12 @@ on:
         description: Path to the Dockerfile
         required: false
         default: "./Dockerfile"
+        type: string
       CONTEXT_PATH:
         description: Docker build context
         required: false
-        default: "."
+        default: "./"
+        type: string
     outputs:
       IMAGE_TAG_DEPLOY:
         description: Image Tag to be deployed
@@ -42,6 +41,13 @@ jobs:
       # Checkout Code
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      # Extract Application Name from pom.xml
+      - name: Get Application Name from pom.xml
+        id: app_name
+        run: |
+          APP_NAME=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='artifactId']/text()" pom.xml)
+          echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
 
       # AWS Authentication
       - name: Configure AWS Credentials
@@ -86,4 +92,4 @@ jobs:
           file: ${{ inputs.DOCKERFILE_PATH }}
           push: true
           tags: |
-            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ env.TAG }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ env.APP_NAME }}-${{ env.TAG }}
