@@ -44,8 +44,9 @@ jobs:
     uses: ./.github/workflows/application-deployment.yml
     with:
       IMAGE_TAG: ${{ needs.build-and-push.outputs.IMAGE_TAG_DEPLOY }}
-      APP_NAME: ${{ needs.build-and-push.outputs.APP_NAME }}
-      EKS_CLUSTER_NAME: "java-web-app-cluster"
+      APP_NAME: ${{ vars.build-and-push.outputs.App_NAME }}
+      EKS_CLUSTER_NAME: ${{vars.EKS_CLUSTER_NAME}}
+   
     secrets:
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       AWS_REGION: ${{ secrets.AWS_REGION }}

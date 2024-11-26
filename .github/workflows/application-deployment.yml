@@ -15,6 +15,7 @@ on:
         description: "EKS Cluster Name"
         required: true
         type: string
+        default: "java-web-app-cluster"
 
     secrets:
       AWS_ACCOUNT_ID:
