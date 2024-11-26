@@ -5,13 +5,11 @@ on:
     branches:
       - master
       - feature/*
-      - feature-1
 
   pull_request:
     types: [opened, synchronize, reopened] # Trigger when PR is opened, updated, or reopened
     branches:
       - feature/*
-      - feature-1
 
 jobs:
 
