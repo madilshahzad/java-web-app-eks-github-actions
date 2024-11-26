@@ -1,18 +1,20 @@
 name: Main Workflow
 
 on:
-  # Trigger for pushes to the main branch
   push:
     branches:
-      - main
+      - master
+      - feature/*         
+      - feature-*        
+      - feature-*/**    
 
-  # Trigger for pull requests to feature branches
   pull_request:
+    types: [opened, synchronize, reopened] 
     branches:
-      - feature/*
+      - feature/*      
+      - feature-*        
+      - feature-*/**      
 
-  # Allow manual workflow runs
-  workflow_dispatch:
 
 jobs:
 
@@ -24,7 +26,7 @@ jobs:
 
 
   build-and-push:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/master'
     uses: ./.github/workflows/build-image.yml
     with:
       DOCKERFILE_PATH: "./Dockerfile" 

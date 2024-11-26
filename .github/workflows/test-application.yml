@@ -14,18 +14,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      
-      - uses: ./.github/workflows/checkout.yml
-
+      # Step 1: Checkout Code
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
       # Step 2: Set up JDK
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: 17 # Update based on your project's Java version
+          java-version: 21 # Updated to Java 21
           distribution: temurin
 
-      # Step 3: Run Spring Boot tests
+      # Step 3: Run Spring Boot Tests
       - name: Run Spring Boot Tests
         run: |
           # Find the directory containing pom.xml
