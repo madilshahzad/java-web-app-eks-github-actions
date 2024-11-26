@@ -28,7 +28,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     uses: ./.github/workflows/build-image.yml
     with:
-      DOCKERFILE_PATH: "./Dockerfile" # Assumes Dockerfile is in the root
+      DOCKERFILE_PATH: "./Dockerfile"
       CONTEXT_PATH: "./"             # Root context
       App_NAME: "java-web-app"
     secrets:
@@ -45,10 +45,11 @@ jobs:
     with:
       IMAGE_TAG: ${{ needs.build-and-push.outputs.IMAGE_TAG_DEPLOY }}
       APP_NAME: ${{ needs.build-and-push.outputs.APP_NAME }}
-      EKS_CLUSTER_NAME: "${{ secrets.EKS_CLUSTER_NAME }}"
-
+      EKS_CLUSTER_NAME: "java-web-app-cluster"
     secrets:
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
       ROLE_NAME: ${{ secrets.ROLE_NAME }}
+    
  
+  

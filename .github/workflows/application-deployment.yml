@@ -26,10 +26,8 @@ on:
       ROLE_NAME:
         description: "Role Name"
         required: true
-    outputs:
-      IMAGE_TAG_DEPLOY:
-        description: "Image Tag to be deployed"
-        value: ${{ jobs.deploy-to-kubernetes.outputs.IMAGE_TAG }}
+
+
 
 jobs:
   deploy-to-kubernetes:
