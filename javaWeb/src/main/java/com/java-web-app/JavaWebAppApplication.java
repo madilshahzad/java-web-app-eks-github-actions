@@ -1,8 +1,7 @@
+package com.java_web_app; 
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-package com.java_web_app;
-
 
 @SpringBootApplication
 public class JavaWebAppApplication {
