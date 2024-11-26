@@ -3,7 +3,10 @@ FROM maven:3.9.6-sapmachine-21 AS build
 
 WORKDIR /home/app/
 
-# Copy the entire project into the container
+
+# Copy custom Maven settings
+COPY settings.xml /root/.m2/settings.xml
+
 COPY . /home/app/
 
 # Build the application
