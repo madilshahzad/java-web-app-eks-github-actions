@@ -4,35 +4,51 @@ on:
   push:
     branches:
       - master
-      - feature/*         
-      - feature-*        
-      - feature-*/**    
+      - feature/*
+      - feature-*
+      - feature-*/**
 
   pull_request:
-    types: [opened, synchronize, reopened] 
+    types: [opened, synchronize, reopened]
     branches:
-      - feature/*      
-      - feature-*        
-      - feature-*/**      
-
+      - feature/*
+      - feature-*
+      - feature-*/**
 
 jobs:
 
+  # Test Spring Boot application
   test-application:
     uses: ./.github/workflows/test-application.yml
     with:
       MAVEN_OPTS: "-Xmx1024m"
 
-
-
+  # Build and push Docker image to ECR
   build-and-push:
     if: github.ref == 'refs/heads/master'
     uses: ./.github/workflows/build-image.yml
     with:
-      DOCKERFILE_PATH: "./Dockerfile" 
-      CONTEXT_PATH: "./"             
+      DOCKERFILE_PATH: "./Dockerfile" # Assumes Dockerfile is in the root
+      CONTEXT_PATH: "./"             # Root context
+      App_NAME: "java-web-app"
     secrets:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       ROLE_NAME: ${{ secrets.ROLE_NAME }}
       ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+
+  # Deploy application to Kubernetes
+  deploy:
+    needs: [build-and-push] 
+    if: github.ref == 'refs/heads/master'
+    uses: ./.github/workflows/application-deployment.yml
+    with:
+      IMAGE_TAG: ${{ needs.build-and-push.outputs.IMAGE_TAG_DEPLOY }}
+      APP_NAME: ${{ needs.build-and-push.outputs.APP_NAME }}
+      EKS_CLUSTER_NAME: "${{ secrets.EKS_CLUSTER_NAME }}"
+
+    secrets:
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      ROLE_NAME: ${{ secrets.ROLE_NAME }}
+ 

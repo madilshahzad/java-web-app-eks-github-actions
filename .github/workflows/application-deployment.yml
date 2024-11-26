@@ -1,0 +1,73 @@
+name: "Reusable Workflow - Deploy to Kubernetes"
+
+on:
+  workflow_call:
+    inputs:
+      IMAGE_TAG:
+        description: "Docker Image Tag to deploy"
+        required: true
+        type: string
+      APP_NAME:
+        description: "Application Name"
+        required: true
+        type: string
+      EKS_CLUSTER_NAME:
+        description: "EKS Cluster Name"
+        required: true
+        type: string
+
+    secrets:
+      AWS_ACCOUNT_ID:
+        description: "AWS Account ID"
+        required: true
+      AWS_REGION:
+        description: "AWS Target Region"
+        required: true
+      ROLE_NAME:
+        description: "Role Name"
+        required: true
+    outputs:
+      IMAGE_TAG_DEPLOY:
+        description: "Image Tag to be deployed"
+        value: ${{ jobs.deploy-to-kubernetes.outputs.IMAGE_TAG }}
+
+jobs:
+  deploy-to-kubernetes:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Configure AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.ROLE_NAME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # Step 3: Update kubeconfig for EKS
+      - name: Update kubeconfig for EKS
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+          aws eks update-kubeconfig --name ${{ inputs.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+
+      # Step 4: Install Helm
+      - name: Install Helm
+        run: |
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
+
+      # Step 5: Deploy to Kubernetes
+      - name: Deploy to Kubernetes
+        env:
+          IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
+        run: |
+          sed -i.bak "s/IMAGE_TAG/$IMAGE_TAG/g" Helm_Chart/${{ inputs.APP_NAME }}/values.yaml
+          helm upgrade --install ${{ inputs.APP_NAME }} \
+            --namespace ${{ inputs.APP_NAME }} \
+            --create-namespace \
+            ./helm-charts/${{ inputs.APP_NAME }}

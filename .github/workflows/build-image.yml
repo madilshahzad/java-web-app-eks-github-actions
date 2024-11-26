@@ -21,6 +21,10 @@ on:
         required: false
         default: "./Dockerfile"
         type: string
+      APP_NAME:
+        description: Application Name
+        required: true
+        type: string  
       CONTEXT_PATH:
         description: Docker build context
         required: false
@@ -30,6 +34,8 @@ on:
       IMAGE_TAG_DEPLOY:
         description: Image Tag to be deployed
         value: ${{ jobs.build_push_docker.outputs.IMAGE_TAG }}
+
+
 
 jobs:
   build_push_docker:
