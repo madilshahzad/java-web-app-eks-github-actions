@@ -4,14 +4,17 @@ on:
   push:
     branches:
       - master
-      - feature/*
-      - feature-*/** 
+      - feature/*         
+      - feature-*        
+      - feature-*/**    
 
   pull_request:
-    types: [opened, synchronize, reopened] # Trigger when PR is opened, updated, or reopened
+    types: [opened, synchronize, reopened] 
     branches:
-      - feature/*
-      - feature-*/**
+      - feature/*      
+      - feature-*        
+      - feature-*/**      
+
 
 jobs:
 
