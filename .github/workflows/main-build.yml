@@ -24,7 +24,7 @@ jobs:
 
 
   build-and-push:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/master'
     uses: ./.github/workflows/build-image.yml
     with:
       DOCKERFILE_PATH: "./Dockerfile" 
