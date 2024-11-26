@@ -6,12 +6,12 @@ on:
     branches:
       - main
 
-  # Trigger for pull requests to feature branches
+ 
   pull_request:
     branches:
       - feature/*
 
-  # Allow manual workflow runs
+ 
   workflow_dispatch:
 
 jobs:
