@@ -1,0 +1,38 @@
+name: Reusable Workflow - Test Spring Boot Application
+
+on:
+  workflow_call:
+    inputs:
+      MAVEN_OPTS:
+        description: Maven options (e.g., memory settings)
+        required: false
+        type: string
+        default: "-Xmx1024m"
+
+jobs:
+  test-spring-boot:
+    runs-on: ubuntu-latest
+
+    steps:
+      
+      - uses: ./.github/workflows/checkout.yml
+
+
+      # Step 2: Set up JDK
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17 # Update based on your project's Java version
+          distribution: temurin
+
+      # Step 3: Run Spring Boot tests
+      - name: Run Spring Boot Tests
+        run: |
+          # Find the directory containing pom.xml
+          APP_DIR=$(find . -name "pom.xml" -exec dirname {} \;)
+          echo "Found application directory: $APP_DIR"
+          cd $APP_DIR
+          # Run tests
+          mvn test
+        env:
+          MAVEN_OPTS: ${{ inputs.MAVEN_OPTS }}

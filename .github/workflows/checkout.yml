@@ -1,0 +1,9 @@
+name: "Checkout Code"
+on: workflow_call
+
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4

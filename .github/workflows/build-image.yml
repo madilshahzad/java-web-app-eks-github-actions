@@ -39,14 +39,13 @@ jobs:
 
     steps:
       # Checkout Code
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: ./.github/workflows/checkout.yml
 
       # Extract Application Name from pom.xml
       - name: Get Application Name from pom.xml
         id: app_name
         run: |
-          APP_NAME=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='artifactId']/text()" pom.xml)
+          APP_NAME=$(xmllint --xpath '/*[local-name()="project"]/*[local-name()="artifactId"]/text()' pom.xml)
           echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
 
       # AWS Authentication
