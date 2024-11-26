@@ -1,18 +1,16 @@
 name: Main Workflow
 
 on:
-  # Trigger for pushes to the main branch
   push:
     branches:
       - main
 
- 
   pull_request:
+    types: [opened, synchronize, reopened] # Trigger when PR is opened, updated, or reopened
     branches:
       - feature/*
 
- 
-  workflow_dispatch:
+  workflow_dispatch: # Allows manual execution of the workflow
 
 jobs:
 
