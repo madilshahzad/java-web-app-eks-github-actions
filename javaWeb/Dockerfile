@@ -1,23 +1,22 @@
 # Stage 1: Build the application
-FROM maven:3.9.5-eclipse-temurin-17 AS build
-WORKDIR /app
+FROM maven:3.9.6-sapmachine-21 AS build
 
-# Copy the Maven project files
-COPY pom.xml .
-COPY src ./src
+WORKDIR /home/app/
+
+# Copy the entire project into the container
+COPY . /home/app/
 
 # Build the application
 RUN mvn clean package -DskipTests
 
 # Stage 2: Create a lightweight runtime image
-FROM eclipse-temurin:17-jre-alpine
-WORKDIR /app
+FROM openjdk:21-slim
 
-# Copy the built application JAR from the previous stage
-COPY --from=build /app/target/*.jar app.jar
+# Copy the JAR file from the build stage
+COPY --from=build /home/app/target/javaWeb-1.0-SNAPSHOT.jar /usr/local/lib/app.jar
 
 # Expose the application port
 EXPOSE 8080
 
 # Run the Spring Boot application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "/usr/local/lib/app.jar"]
