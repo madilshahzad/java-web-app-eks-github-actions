@@ -1,0 +1,37 @@
+name: Main Build Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - feature/*
+
+jobs:
+  build-image:
+    uses: ./.github/workflows/templates/build-image.yml
+    with:
+      image_name: "javaApp:latest"
+      dockerfile_path: "./Dockerfile"
+      context_path: "."
+
+#   deploy-application:
+#     needs: build-image
+#     uses: ./.github/workflows/templates/deploy-application.yml
+#     with:
+#       server_ip: "192.168.1.100"
+#       ssh_user: "deploy_user"
+#       ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+#   provision-infrastructure:
+#     uses: ./.github/workflows/templates/provision-infra.yml
+#     with:
+#       terraform_directory: "./terraform"
+
+#   kubernetes-deployment:
+#     needs: build-image
+#     uses: ./.github/workflows/templates/deploy-k8s.yml
+#     with:
+#       kubeconfig: ${{ secrets.KUBECONFIG }}
+#       manifest_path: "./k8s/deployment.yaml"
