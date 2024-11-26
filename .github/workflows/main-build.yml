@@ -4,19 +4,37 @@ on:
   push:
     branches:
       - main
+
   pull_request:
     branches:
-        - feature/*
+      - feature/*
+
+  workflow_dispatch: # Allow manual triggering of this workflow
+    inputs:
+      DOCKERFILE_PATH:
+        description: "Path to the Dockerfile"
+        required: false
+        default: "./Dockerfile"
+      CONTEXT_PATH:
+        description: "Docker build context path"
+        required: false
+        default: "./app"
+      ECR_REPOSITORY:
+        description: "ECR repository name"
+        required: true
+      APP_NAME:
+        description: "Application name"
+        required: true
 
 jobs:
   build_and_push:
-    uses: ./.github/workflows/templates/build-and-push-ecr.yml
+    uses: ./.github/workflows/build-and-push-ecr.yml
     with:
-      DOCKERFILE_PATH: "./Dockerfile"
-      CONTEXT_PATH: "./app"
-      ECR_REPOSITORY: "my-ecr-repo"
+      DOCKERFILE_PATH: ${{ github.event.inputs.DOCKERFILE_PATH || "./Dockerfile" }}
+      CONTEXT_PATH: ${{ github.event.inputs.CONTEXT_PATH || "./app" }}
+      ECR_REPOSITORY: ${{ github.event.inputs.ECR_REPOSITORY || "my-ecr-repo" }}
+      APP_NAME: ${{ github.event.inputs.APP_NAME || "my-app" }}
     secrets:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       ROLE_NAME: ${{ secrets.ROLE_NAME }}
-      APP_NAME: "my-app"
