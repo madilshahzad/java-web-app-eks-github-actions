@@ -35,6 +35,8 @@ module "vpc" {
   vpc_database_subnet           = var.vpc_database_subnet
   vpc_id                        = module.vpc.vpc_id
   vpc_availability_zones        = var.vpc_availability_zones
+  environment                   = var.environment
+  vpc_name                      = var.vpc_name
 }
 
 module "bastion_host" {
@@ -43,6 +45,7 @@ module "bastion_host" {
   key_name       = var.key_name
   vpc_id         = module.vpc.vpc_id
   public_subnets = module.vpc.public_subnets
+  bastion_name   = var.bastion_name
 }
 
 module "eks" {

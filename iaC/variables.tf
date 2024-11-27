@@ -106,3 +106,11 @@ variable "key_name" {
   description = "Name of the key pair"
   type        = string
 }
+
+variable "environment"{}
+variable "vpc_name"{}
+
+variable "bastion_name" {
+  description = "Name of the bastion host"
+  type        = string
+}

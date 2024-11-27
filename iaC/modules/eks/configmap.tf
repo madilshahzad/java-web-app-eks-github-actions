@@ -4,7 +4,7 @@ data "template_file" "aws_auth" {
   vars = {
     node_role_arn  = var.node_role_arn
     master_role_arn = var.master_role_arn
-    users = jsonencode(var.users)  # Convert the list of users to JSON for the template
+    users = jsonencode(var.users)  
   }
 }
 

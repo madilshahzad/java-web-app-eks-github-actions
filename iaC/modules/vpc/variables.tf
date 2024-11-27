@@ -15,3 +15,7 @@ variable "vpc_database_subnet" {
 variable "vpc_id"{}
 
 variable "vpc_availability_zones"{}
+
+variable "environment"{}
+
+variable "vpc_name"{}

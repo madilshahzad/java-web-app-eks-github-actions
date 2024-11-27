@@ -42,7 +42,7 @@ resource "aws_eks_node_group" "eks_ng_private" {
   }
 
   remote_access {
-    ec2_ssh_key = "personal-key"
+    ec2_ssh_key = var.key_name
   }
 
   update_config {
@@ -53,10 +53,6 @@ resource "aws_eks_node_group" "eks_ng_private" {
     aws_iam_role_policy_attachment.eks_node_policies
   ]
 }
-
-
-
-
 
 data "aws_partition" "current" {}
 
