@@ -57,7 +57,12 @@ module "eks" {
   users                                = var.users
   node_role_arn                        = var.node_role_arn
   master_role_arn                      = var.master_role_arn
-  
+  cluster_name                         = var.cluster_name
+  cluster_version                      = var.cluster_version
+  node_group_name                      = var.node_group_name
+  key_name                             = var.key_name
+
+
 }
 
 

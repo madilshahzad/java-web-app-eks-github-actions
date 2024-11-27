@@ -30,3 +30,23 @@ variable "users" {
     groups   = list(string)
   }))
 }
+
+variable "cluster_name" {
+  description = "Name of the EKS cluster"
+  type        = string
+}
+
+variable "cluster_version" {
+  description = "Version of the EKS cluster"
+  type        = string
+}
+
+variable "node_group_name"  {
+  description = "Name of the EKS node group"
+  type        = string
+}
+
+variable "key_name" {
+  description = "Name of the key pair"
+  type        = string
+}

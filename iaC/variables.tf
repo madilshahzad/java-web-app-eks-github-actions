@@ -2,10 +2,6 @@ variable "instance_type" {
   default = "t2.large"
 }
 
-variable "key_name" {
-  default = "personal-key"
-}
-
 variable "vpc_cidr_block" {
   type        = string
   default     = "10.0.0.0/16"
@@ -89,4 +85,24 @@ variable "users" {
     username = string
     groups   = list(string)
   }))
+}
+
+variable "cluster_name" {
+  description = "Name of the EKS cluster"
+  type        = string
+}
+
+variable "cluster_version" {
+  description = "Version of the EKS cluster"
+  type        = string
+}
+
+variable "node_group_name" {
+  description = "Name of the EKS node group"
+  type        = string
+}
+
+variable "key_name" {
+  description = "Name of the key pair"
+  type        = string
 }

@@ -1,8 +1,8 @@
 # Creating EKS Cluster
 resource "aws_eks_cluster" "eks_cluster" {
-  name     = "eks_cluster"
+  name     = var.cluster_name
   role_arn = aws_iam_role.eks_master_role.arn
-  version  = "1.26"
+  version  = var.cluster_version
 
   vpc_config {
     subnet_ids              = var.public_subnet_ids
@@ -26,7 +26,7 @@ resource "aws_eks_cluster" "eks_cluster" {
 # Private Node Group
 resource "aws_eks_node_group" "eks_ng_private" {
   cluster_name    = aws_eks_cluster.eks_cluster.name
-  node_group_name = "eks_ng_private"
+  node_group_name = var.node_group_name
   node_role_arn   = aws_iam_role.eks_node_role.arn
   subnet_ids      = var.private_subnet_ids
 
