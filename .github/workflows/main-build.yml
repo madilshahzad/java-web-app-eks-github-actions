@@ -16,41 +16,15 @@ on:
       - feature-*/**
 
 jobs:
-
-  # Test Spring Boot application
-  test-application:
-    uses: ./.github/workflows/test-application.yml
-    with:
-      MAVEN_OPTS: "-Xmx1024m"
-
-  # Build and push Docker image to ECR
+  # Build and Push Job
   build-and-push:
-    if: github.ref == 'refs/heads/master'
-    uses: ./.github/workflows/build-image.yml
+    uses: madilshahzad/Build-Deploy/.github/workflows/build-and-push-docker.yml@main
     with:
-      DOCKERFILE_PATH: "./Dockerfile"
-      CONTEXT_PATH: "./"             # Root context
-      App_NAME: "java-web-app"
+      DOCKERFILE_PATH: "./Dockerfile" # Path to your Dockerfile
+      CONTEXT_PATH: "./"             # Build context
+      APP_NAME: "java-web-app"       # Application name
     secrets:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       ROLE_NAME: ${{ secrets.ROLE_NAME }}
       ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-
-  # Deploy application to Kubernetes cluster Using Helm
-  deploy:
-    needs: [build-and-push] 
-    if: github.ref == 'refs/heads/master'
-    uses: ./.github/workflows/application-deployment.yml
-    with:
-      IMAGE_TAG: ${{ needs.build-and-push.outputs.IMAGE_TAG_DEPLOY }}
-      APP_NAME: ${{ vars.build-and-push.outputs.App_NAME }}
-      EKS_CLUSTER_NAME: ${{vars.EKS_CLUSTER_NAME}}
-   
-    secrets:
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      ROLE_NAME: ${{ secrets.ROLE_NAME }}
-    
- 
-  
