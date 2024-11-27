@@ -54,6 +54,10 @@ module "eks" {
   service_ipv4_cidr                    = var.service_ipv4_cidr
   cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
   eks_oidc_root_ca_thumbprint          = var.eks_oidc_root_ca_thumbprint
+  users                                = var.users
+  node_role_arn                        = var.node_role_arn
+  master_role_arn                      = var.master_role_arn
+  
 }
 
 
