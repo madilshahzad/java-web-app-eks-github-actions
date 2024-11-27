@@ -47,12 +47,13 @@ output "cluster_primary_security_group_id" {
   value       = aws_eks_cluster.eks_cluster.vpc_config[0].cluster_security_group_id
 }
 
-output "node_group_private_id" {
-  description = "Public Node Group ID"
-  value       = aws_eks_node_group.eks_ng_private.id
-}
+# output "node_group_private_id" {
+#   description = "Public Node Group ID"
+#   value       = aws_eks_node_group.eks_ng_private.id
+# }
 
-output "node_group_private_arn" {
-  description = "Public Node Group ARN"
-  value       = aws_eks_node_group.eks_ng_private.arn
-}
+# output "node_group_private_arn" {
+#   description = "Public Node Group ARN"
+#   value       = aws_eks_node_group.eks_ng_private.arn
+# }
+

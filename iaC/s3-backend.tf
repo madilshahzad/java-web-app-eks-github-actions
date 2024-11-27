@@ -4,7 +4,7 @@ terraform {
   backend "s3" {
     bucket         = "terraform-state-eks-productionenv"
     key            = "terraform.tfstate"
-    region         = var.aws_region
+    region         = "us-east-2"
     dynamodb_table = "terraform-state-lock"
   }
 }

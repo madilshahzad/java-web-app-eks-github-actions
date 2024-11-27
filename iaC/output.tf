@@ -38,7 +38,9 @@ output "nat_public_ips" {
   value       = module.vpc.nat_public_ips
 }
 
-
+#############################
+#    Bastion Host Output Variables
+#############################
 
 
 
@@ -92,12 +94,12 @@ output "cluster_primary_security_group_id" {
   value       = module.eks.cluster_primary_security_group_id
 }
 
-output "node_group_private_id" {
-  description = "Private Node Group ID"
-  value       = module.eks.node_group_private_id
-}
+# output "node_group_private_id" {
+#   description = "Private Node Group ID"
+#   value       = module.eks.node_group_private_id
+# }
 
-output "node_group_private_arn" {
-  description = "Private Node Group ARN"
-  value       = module.eks.node_group_private_arn
-}
+# output "node_group_private_arn" {
+#   description = "Private Node Group ARN"
+#   value       = module.eks.node_group_private_arn
+# }
