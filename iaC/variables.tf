@@ -1,138 +1,72 @@
-# Project Name
-variable "project" {
-  description = "Name of the Project"
-  type        = string
-}
-# AWS Region
-variable "aws_region" {
-  description = "Name of the AWS Region"
-  type        = string
-}
-# Environment Name
-variable "environment" {
-  description = "Name of the AWS Environment"
-  type        = string
-}
-# AWS Account ID
-variable "aws_account_id" {
-  description = "AWS Account ID"
-  type        = string
-}
-
-# Local Values in Terraform
-locals {
-  owners      = var.project
-  environment = var.environment
-  name        = "${var.project}-${var.environment}"
-  common_tags = {
-    owners      = local.owners
-    environment = local.environment
-  }
-  eks_cluster_name = "${local.name}-${var.cluster_name}"
-}
-
-#############################
-#    VPC Input Variables
-#############################
-# VPC Name
-variable "vpc_name" {
-  description = "VPC Name"
-  type        = string
-}
-# VPC CIDR Block
-variable "vpc_cidr_block" {
-  description = "VPC CIDR Block"
-  type        = string
-}
-# VPC Public Subnets
-variable "vpc_public_subnets" {
-  description = "VPC Public Subnets"
-  type        = list(string)
-}
-# VPC Private Subnets
-variable "vpc_private_subnets" {
-  description = "VPC Private Subnets"
-  type        = list(string)
-}
-# VPC Database Subnets
-variable "vpc_protected_subnets" {
-  description = "VPC Database Subnets"
-  type        = list(string)
-}
-
-#############################
-#    Bastion Host Input Variables
-#############################
-
 variable "instance_type" {
-  description = "EC2 Instance Type"
-  type        = string
+  default = "t2.large"
 }
 
-variable "instance_keypair" {
-  description = "AWS EC2 Key pair that needs to be associated with EC2 Instance"
-  type        = string
+variable "key_name" {
+  default = "terraformmac"
 }
 
-#############################
-#    EKS Cluster Input Variables
-#############################
+variable "vpc_cidr_block" {
+  type        = string
+  default     = "10.0.0.0/16"
+  description = "VPC Cidr Block"
 
-
-# EKS Cluster Input Variables
-variable "cluster_name" {
-  description = "Name of the EKS cluster"
-  type        = string
-}
-variable "github_access_role_name" {
-  description = "Role which can access the cluster"
-  type        = string
-}
-variable "cluster_service_ipv4_cidr" {
-  description = "service ipv4 cidr for the kubernetes cluster"
-  type        = string
-}
-variable "cluster_version" {
-  description = "Kubernetes minor version to use for the EKS cluster"
-  type        = string
-}
-variable "cluster_endpoint_private_access" {
-  description = "Indicates whether or not the Amazon EKS private API server endpoint is enabled"
-  type        = bool
-}
-variable "aws_ecr_repository" {
-  description = "AWS ECR Repo for Web App Images"
-  type        = string
-}
-variable "repository_name" {
-  description = "The name of the GitHub repository"
-  type        = string
-}
-variable "cluster_admin_user_arn" {
-  description = "ARN for the principal to authenticate agianst eks"
-  type        = string
 }
 
-variable "ng_instance_type" {
-  description = "EC2 Instance Type"
+variable "vpc_public_subnet_cidr_block" {
+  type    = list(string)
+  default = ["10.0.101.0/24", "10.0.102.0/24"]
+}
+
+variable "vpc_private_subnet_cidr_block" {
+
+  type    = list(string)
+  default = ["10.0.1.0/24", "10.0.2.0/24"]
+
+}
+
+variable "vpc_database_subnet" {
   type        = list(string)
+  default     = ["10.0.151.0/24", "10.0.152.0/24"]
+  description = "description"
 }
 
-variable "ng_ami_type" {
-  description = "EC2 AMI Type"
+variable "vpc_availability_zones" {
+  type    = list(string)
+  default = ["us-east-1a", "us-east-1b"]
+}
+
+variable "cluster_endpoint_private_access" {
+
+  description = "cluster endpoint private access"
+  type        = bool
+  default     = true
+
+}
+
+variable "cluster_endpoint_public_access" {
+
+  description = "cluster endpoint public access"
+  type        = bool
+  default     = true
+
+
+}
+
+variable "cluster_endpoint_public_access_cidrs" {
+
+  description = "cluster endpoint public access cidrs"
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
+
+variable "service_ipv4_cidr" {
+  description = "The CIDR block to allow public access to the cluster"
   type        = string
+  default     = null
 }
-
-variable "ng_disk_size" {
-  description = "Node group Disk Size"
+variable "eks_oidc_root_ca_thumbprint" {
+  description = "The root certificate of the issuer used to issue OIDC tokens for Kubernetes Service Accounts."
   type        = string
+  default     = "9e99a48a9960b14926bb7f3b02e22da2b0ab7280"
 }
-variable "scaling_desired_size" {}
-variable "scaling_max_size" {}
-variable "scaling_min_size" {}
-
-variable "aws_role_arn" {
-  description = "ARN of the role to assume"
-  type        = string
-}
-

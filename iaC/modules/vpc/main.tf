@@ -1,27 +1,26 @@
-data "aws_availability_zones" "available" {
-}
+data "aws_availability_zones" "available" {}
 
-module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "5.4.0"
-  name            = "${var.vpc_name}-${var.eks_cluster_name}"
-  cidr            = var.vpc_cidr_block
-  azs             = data.aws_availability_zones.available.names
-  public_subnets  = var.vpc_public_subnets
-  private_subnets = var.vpc_private_subnets
-  database_subnets = var.vpc_protected_subnets
-  enable_dns_hostnames = true
-  enable_dns_support   = true
-  tags     = var.common_tags
-  vpc_tags = var.common_tags
-  public_subnet_tags = {
-    Name = "VPC Public Subnets"
-  }
-  private_subnet_tags = {
-    Name = "VPC Private Subnets"
-  }
-  database_subnet_tags = {
-    Name = "VPC Private Database Subnets"
-  }
-  map_public_ip_on_launch = true
+module "vpc"{
+    source = "github.com/terraform-aws-modules/terraform-aws-vpc"
+    name = "my-vpc"
+    cidr = var.vpc_cidr_block
+    azs = var.vpc_availability_zones
+    public_subnets = var.vpc_public_subnet_cidr_block
+    private_subnets = var.vpc_private_subnet_cidr_block
+    database_subnets = var.vpc_database_subnet
+    create_database_subnet_route_table = true
+    map_public_ip_on_launch = true
+
+    enable_nat_gateway = true
+    single_nat_gateway = true
+
+    enable_dns_hostnames = true
+    enable_dns_support = true
+
+    tags = {
+        Terraform = "true"
+        Environment = "dev"
+    }
+
+    
 }
