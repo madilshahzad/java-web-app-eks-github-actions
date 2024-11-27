@@ -64,6 +64,7 @@ module "eks" {
   cluster_version                      = var.cluster_version
   node_group_name                      = var.node_group_name
   key_name                             = var.key_name
+  environment                          = var.environment
 
 
 }
@@ -71,7 +72,7 @@ module "eks" {
 
 resource "null_resource" "update_kubeconfig" {
   provisioner "local-exec" {
-    command = "aws eks update-kubeconfig --region us-east-1 --name eks_cluster --role-arn arn:aws:iam::211125460769:role/Terraform-Role --alias eks-cluster"
+    command = "aws eks update-kubeconfig --region us-east-1 --name eks-cluster --role-arn arn:aws:iam::211125460769:role/Terraform-Role --alias eks-cluster"
   }
   depends_on = [module.eks,
     module.bastion_host,
