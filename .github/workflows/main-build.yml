@@ -15,6 +15,9 @@ on:
       - feature-*
       - feature-*/**
 
+  workflow_dispatch:
+  
+
 jobs:
   # Build and Push Job
   build-and-push:
