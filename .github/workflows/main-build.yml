@@ -34,15 +34,17 @@ jobs:
 
       - name: Build and Push Image
         run: |
-          curl -H "Authorization: token ${{secrets.PAT}}" \
-              -H "Accept: application/vnd.github.v3+json" \
-              https://api.github.com/repos/madilshahzad/Build-Deploy/actions/workflows/build-deploy.yml/dispatches \
-              -d '{
-                "ref": "main",
-                "inputs": {
-                  "DOCKERFILE_PATH": "./Dockerfile",
-                  "CONTEXT_PATH": "./",
-                  "APP_NAME": "java-web-app"
-                }
-              }'
+          curl -X POST \
+            -H "Authorization: token ${{secrets.PAT}}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/madilshahzad/Build-Deploy/actions/workflows/build-deploy.yml/dispatches \
+            -d '{
+              "ref": "main",
+              "inputs": {
+                "DOCKERFILE_PATH": "./Dockerfile",
+                "CONTEXT_PATH": ".",
+                "APP_NAME": "java-web-app"
+              }
+            }'
+
 
