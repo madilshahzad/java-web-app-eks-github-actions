@@ -12,17 +12,17 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.region
 
   assume_role {
-    role_arn     = "arn:aws:iam::211125460769:role/Terraform-Role"
+    role_arn     = var.assume_role_arn
     session_name = "TerraformSession"
   }
 }
 
 provider "kubernetes" {
-  config_path    = "~/.kube/config"
-  config_context = "eks-cluster"
+  config_path    = var.kubeconfig_path
+  config_context = var.cluster_name
 
 }
 
@@ -65,18 +65,10 @@ module "eks" {
   node_group_name                      = var.node_group_name
   key_name                             = var.key_name
   environment                          = var.environment
+  assume_role_arn                      = var.assume_role_arn
+  cluster_alias                       = var.cluster_alias 
+  region                               = var.region
 
 
 }
 
-
-resource "null_resource" "update_kubeconfig" {
-  provisioner "local-exec" {
-    command = "aws eks update-kubeconfig --region us-east-1 --name eks-cluster --role-arn arn:aws:iam::211125460769:role/Terraform-Role --alias eks-cluster"
-  }
-  depends_on = [module.eks,
-    module.bastion_host,
-    module.vpc
-
-  ]
-}

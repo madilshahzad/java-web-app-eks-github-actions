@@ -55,3 +55,19 @@ variable "environment" {
   description = "Environment"
   type        = string
 }
+
+variable "region" {
+  description = "AWS region"
+  type        = string
+}
+
+
+variable assume_role_arn {
+  description = "ARN of the role to assume"
+  type        = string
+}
+
+variable "cluster_alias" {
+  description = "Alias of the EKS cluster"
+  type        = string
+}
