@@ -1,0 +1,228 @@
+[33mcommit b02d1fc29b1b06cc927648008721042779c4a3b1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature-1[m[33m)[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Wed Nov 27 13:17:09 2024 +0000
+
+    refactor: clean up VPC and Bastion module outputs and variables
+
+[33mcommit 23d893e98c302326760a97d46e26557c6ee32f6f[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Wed Nov 27 11:12:28 2024 +0000
+
+    update Terraform configurations: change S3 backend region and remove unused EKS variables
+
+[33mcommit 8b394c8791416f79cc99d00c136386eabda7ba01[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Wed Nov 27 10:09:26 2024 +0000
+
+    add Terraform configurations for VPC, Bastion host, and S3 backend
+
+[33mcommit 6965d16582ab18a935fa4320392f47be1c5f4b24[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 14:30:50 2024 +0000
+
+    add Helm chart and values file for Java web application deployment
+
+[33mcommit 29f32d151addcdfef9c87b509f05ea40a23ec5a2[m[33m ([m[1;31morigin/feature-1[m[33m)[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 14:22:36 2024 +0000
+
+    Deploy application to Kubernetes cluster Using Helm
+
+[33mcommit 91ee15717a69a8ee6cfbc91fc74dd091cd174f99[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 14:20:51 2024 +0000
+
+    fix deployment parameter issues
+
+[33mcommit 1b8948e4363e72fe31737077ddb5354c8d41c25d[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 14:13:51 2024 +0000
+
+    adding github actions deployment workflow
+
+[33mcommit c2504518bfffc85a0697fc4144629aa6d58329dc[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 14:06:01 2024 +0000
+
+    adding application deployment and helm charts init
+
+[33mcommit 436adb16ab22d2b20e7d3985c93edba285b13e41[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 13:13:15 2024 +0000
+
+    adding branches
+
+[33mcommit 803c08c3151edee81f73f79b2a88158a26b18dcc[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 12:45:39 2024 +0000
+
+    fixing issue
+
+[33mcommit 2beeb9b590ee4f1dabbb2f80f2508e8de45fbf3d[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 12:43:19 2024 +0000
+
+    fixing branch issue
+
+[33mcommit 30846a0897bba2b2a113c8d7744a42122dfddde2[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 12:41:44 2024 +0000
+
+    fix branch issue and adding README.md file
+
+[33mcommit 6e56871de747869ad3b3f15408194ddbe0897240[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 12:38:22 2024 +0000
+
+    fixing java version error
+
+[33mcommit 7582182a0afcdbb1613e565192a1332df8c88117[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 12:36:27 2024 +0000
+
+    fix branch issue
+
+[33mcommit 1312207679b7059a4248078209e31242244f29aa[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 12:34:03 2024 +0000
+
+    fix branch issue
+
+[33mcommit 7bd620f122c8cd85d71bc635587d08737d61a2ff[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 12:33:11 2024 +0000
+
+    testing on pr
+
+[33mcommit e4e8b42c3deaf2e38d6bf587f9302687e83a4ef2[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 12:29:58 2024 +0000
+
+    fixing pr issue where github action no ttaking checkout file multiple times
+
+[33mcommit f92183f0d3134b4524f5eca95ef11c3ce0d79ebe[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 12:24:36 2024 +0000
+
+    fixing pr issue
+
+[33mcommit 0f6e721a88dfe58cc8f126614ff723d4ced5cd49[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 12:22:39 2024 +0000
+
+    testing the pipeline
+
+[33mcommit aa26c338e0ca1e7ba212640ae38b5fba66e35654[m[33m ([m[1;32mmaster[m[33m)[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 12:22:04 2024 +0000
+
+    fix issue
+
+[33mcommit ac3ce298f7a64c8f25f535419ea8bc77253d72db[m[33m ([m[1;31morigin/master[m[33m)[m
+Merge: c6d58ec 5918299
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 12:18:38 2024 +0000
+
+    Merge branch 'master' of https://github.com/madilshahzad/java-web-app-eks-github-actions
+
+[33mcommit c6d58eccdc235fcddf6bfaa57561aab7b6177d12[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 12:18:25 2024 +0000
+
+    adding test application to github actions
+
+[33mcommit 5918299505f689bca4512efbeef0847bd68ca8dc[m
+Author: madilshahzad <m.adilshahzad@systemsltd.com>
+Date:   Tue Nov 26 11:50:46 2024 +0000
+
+    Delete javaWeb/mvnw
+
+[33mcommit 0cfb7c1129cb8d77fb026658f8708727bbd3fcde[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 11:48:01 2024 +0000
+
+    adding action
+
+[33mcommit 98085caedf4dd2d53d789e890abd96412edbba37[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 11:37:53 2024 +0000
+
+    fixing issue
+
+[33mcommit 7961bfb4a9a90112c8114306f4babe3a6c91bcf8[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 11:34:18 2024 +0000
+
+    fixin github action issue
+
+[33mcommit 32c294502c08b88c8b36ce43044143f1c74263f9[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 11:32:35 2024 +0000
+
+    adding pull request and build image action
+
+[33mcommit 6d7b08d09723726392a1bf0979d502abe5384632[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 11:23:43 2024 +0000
+
+    adding template for github actions
+
+[33mcommit 594aff029c5b33d8f99d70e893cfb0d079cd358f[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 11:10:47 2024 +0000
+
+    testing the jar file and removing logs
+
+[33mcommit 477bf8c25df2f33a20bc7c126b1e75e75128c7fc[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 11:06:28 2024 +0000
+
+    adding github actions template and main build
+
+[33mcommit 95a600d8010775f94c2b943eb17457556495b01e[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 10:57:04 2024 +0000
+
+    fixing pom file issue
+
+[33mcommit 0f0f40a950d314f3c23b4b3ac194a8e1ec948a42[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 10:48:09 2024 +0000
+
+    fixing docker issue
+
+[33mcommit 2729d78f9268e794bd171bf4bf471ae78b3b2968[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 10:44:23 2024 +0000
+
+    fixing docker issue
+
+[33mcommit 5950ce802ff736e7a6803dac7be8ea2c3b3d38d4[m
+Author: madilshahzad <m.adilshahzad@systemsltd.com>
+Date:   Tue Nov 26 10:38:01 2024 +0000
+
+    Rename DOCKERFILE to Dockerfile
+
+[33mcommit 2413bcdd17cdb273164e339cf8d5ace5f7bb3bb9[m[33m ([m[1;31morigin/madilshahzad/dev[m[33m, [m[1;32mmadilshahzad/dev[m[33m)[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 10:03:23 2024 +0000
+
+    Adding the java application
+
+[33mcommit 273b614ae7e79163cb0decc1bea9a66b95486cea[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 09:40:21 2024 +0000
+
+    fixing pom issue
+
+[33mcommit be2e99b90c915ee5b767a340a715ce298a7f2c43[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 09:33:38 2024 +0000
+
+    adding maven and application
+
+[33mcommit ceda1dab793bc54ff2d84d802e171da4df9f047a[m
+Author: Adil <53600644+adilshehzad786@users.noreply.github.com>
+Date:   Tue Nov 26 09:23:28 2024 +0000
+
+    adding java app

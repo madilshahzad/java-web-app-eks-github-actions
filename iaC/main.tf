@@ -20,6 +20,11 @@ provider "aws" {
   }
 }
 
+provider "kubernetes" {
+  config_path    = "~/.kube/config"
+  config_context = "eks-cluster"
+
+}
 
 
 module "vpc" {
@@ -49,4 +54,16 @@ module "eks" {
   service_ipv4_cidr                    = var.service_ipv4_cidr
   cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
   eks_oidc_root_ca_thumbprint          = var.eks_oidc_root_ca_thumbprint
+}
+
+
+resource "null_resource" "update_kubeconfig" {
+  provisioner "local-exec" {
+    command = "aws eks update-kubeconfig --region us-east-1 --name eks_cluster --role-arn arn:aws:iam::211125460769:role/Terraform-Role --alias eks-cluster"
+  }
+  depends_on = [module.eks,
+    module.bastion_host,
+    module.vpc
+
+  ]
 }

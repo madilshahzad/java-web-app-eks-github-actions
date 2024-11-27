@@ -3,7 +3,7 @@ variable "instance_type" {
 }
 
 variable "key_name" {
-  default = "terraformmac"
+  default = "personal-key"
 }
 
 variable "vpc_cidr_block" {
@@ -70,3 +70,5 @@ variable "eks_oidc_root_ca_thumbprint" {
   type        = string
   default     = "9e99a48a9960b14926bb7f3b02e22da2b0ab7280"
 }
+
+
