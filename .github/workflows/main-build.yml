@@ -16,22 +16,31 @@ on:
       - feature-*/**
 
   workflow_dispatch:
-  
+    inputs:
+      target_service:
+        description: "Service to target"
+        required: true
+        default: "default-service"
+      target_version:
+        description: "Version to target"
+        required: true
+        default: "1.0.0"
 
 jobs:
   trigger:
     runs-on: ubuntu-latest
 
     steps:
-      - name:  Build and Push Image
+      - name: Build and Push Image
         run: |
           # Set the required variables
           repo_owner="madilshahzad" 
           repo_name="Build-Deploy"  
           event_type="trigger-workflow" 
-          service=${{ github.event.inputs.target_service }}"
+          service="${{ github.event.inputs.target_service }}"
           version="${{ github.event.inputs.target_version }}"
-  
+
+          # Trigger the GitHub API to dispatch an event
           curl -L \
             -X POST \
             -H "Accept: application/vnd.github+json" \
