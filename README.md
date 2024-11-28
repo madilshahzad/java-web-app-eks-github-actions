@@ -157,3 +157,31 @@ cluster_alias = "sample-cluster"
 
 
 
+# Best practices and improvements
+
+1. **Restrict Access to GitHub Repositories**:
+  - Limit access to the GitHub repositories to enhance security. For assessment purposes, these repositories are currently public. 
+
+2. **Implement Terraform State Management**:
+  - Use remote state storage (e.g., AWS S3) with state locking (e.g., DynamoDB) to ensure consistency and prevent conflicts.
+
+3. **Enable Multi-Factor Authentication (MFA)**:
+  - Enforce MFA for accessing AWS resources to enhance security.
+
+4. **Use IAM Policies with Least Privilege**:
+  - Define and apply IAM policies that grant the minimum permissions required for each role.
+
+5. **Regularly Update Dependencies**:
+  - Keep Terraform, Helm, and other dependencies up to date to benefit from security patches and new features.
+
+6. **Automate Security Scans**:
+  - Integrate additional security tools (e.g., Checkov, Trivy) into the CI/CD pipeline for comprehensive security checks.
+
+7. **Monitor and Log Activities**:
+  - Implement logging and monitoring (e.g., AWS CloudWatch, Prometheus) to track and analyze activities within the EKS cluster.
+
+8. **Backup and Disaster Recovery**:
+  - Establish backup procedures and disaster recovery plans for critical components and data.
+
+9. **Document Infrastructure and Processes**:
+  - Maintain detailed documentation for infrastructure setup, CI/CD workflows, and operational procedures to facilitate onboarding and troubleshooting.
