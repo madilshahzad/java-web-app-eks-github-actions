@@ -1,7 +1,9 @@
 name: Main Workflow
 
 on:
-  workflow_dispatch
+  push:
+    branches:
+      - feature-1
 
 jobs:
   trigger_child_workflow:
