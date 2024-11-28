@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Trigger Child Workflow
+      - name: Build and Deploy
         id: trigger
         run: |
           response=$(curl -X POST \
@@ -38,7 +38,7 @@ jobs:
 
           echo "run_id=${run_id}" >> $GITHUB_ENV
 
-      - name: Poll Child Workflow Status
+      - name: Build and Deploy Status
         run: |
           status="in_progress"
           while [[ "$status" == "in_progress" || "$status" == "queued" ]]; do
