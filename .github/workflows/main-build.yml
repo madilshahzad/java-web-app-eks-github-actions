@@ -1,41 +1,18 @@
 name: Main Workflow
 
 on:
-  push:
-    branches:
-      - master
-      - feature/*
-      - feature-*
-      - feature-*/**
-
-  pull_request:
-    types: [opened, synchronize, reopened]
-    branches:
-      - feature/*
-      - feature-*
-      - feature-*/**
-
-  workflow_dispatch:
-    inputs:
-      target_service:
-        description: "Service to target"
-        required: true
-        default: "default-service"
-      target_version:
-        description: "Version to target"
-        required: true
-        default: "1.0.0"
+  workflow_dispatch
 
 jobs:
-  trigger:
+  trigger_child_workflow:
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: Build and Push Image
+      - name: Trigger Child Workflow
+        id: trigger
         run: |
-          curl -X POST \
-            -H "Authorization: token ${{secrets.PAT}}" \
+          response=$(curl -X POST \
+            -H "Authorization: token ${{ secrets.PAT }}" \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/madilshahzad/Build-Deploy/actions/workflows/build-deploy.yml/dispatches \
             -d '{
@@ -45,6 +22,40 @@ jobs:
                 "CONTEXT_PATH": ".",
                 "APP_NAME": "java-web-app"
               }
-            }'
+            }')
 
+          # Sleep for a short period to allow the workflow to start
+          sleep 10
 
+          # Get the workflow run ID of the triggered workflow
+          run_id=$(curl -s \
+            -H "Authorization: token ${{ secrets.PAT }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/madilshahzad/Build-Deploy/actions/runs \
+            | jq -r '.workflow_runs[] | select(.head_branch=="main") | .id' | head -n 1)
+
+          echo "run_id=${run_id}" >> $GITHUB_ENV
+
+      - name: Poll Child Workflow Status
+        run: |
+          status="in_progress"
+          while [[ "$status" == "in_progress" || "$status" == "queued" ]]; do
+            echo "Polling child workflow status..."
+            response=$(curl -s \
+              -H "Authorization: token ${{ secrets.PAT }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              https://api.github.com/repos/madilshahzad/Build-Deploy/actions/runs/${{ env.run_id }})
+            
+            status=$(echo "$response" | jq -r '.status')
+            conclusion=$(echo "$response" | jq -r '.conclusion')
+
+            echo "Current status: $status"
+            [[ "$status" == "completed" ]] && break
+            sleep 10
+          done
+
+          echo "Child workflow completed with conclusion: $conclusion"
+          if [[ "$conclusion" != "success" ]]; then
+            echo "Child workflow failed!"
+            exit 1
+          fi
