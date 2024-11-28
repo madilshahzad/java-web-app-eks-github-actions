@@ -3,7 +3,15 @@ name: Main Workflow
 on:
   push:
     branches:
-      - feature-1
+      - master
+
+
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - feature/*
+      - feature-*
+      - feature-*/**
 
 jobs:
   trigger_infrastructure_provisioning:
