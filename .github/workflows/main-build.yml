@@ -77,6 +77,9 @@ jobs:
   trigger_build_and_deploy:
     needs: trigger_infrastructure_provisioning
     runs-on: ubuntu-latest
+    outputs:
+      IMAGE_TAG_DEPLOY: ${{ steps.fetch_output.outputs.IMAGE_TAG_DEPLOY }}
+
     steps:
       - name: Trigger Build and Deploy Workflow
         id: trigger_build_deploy
@@ -144,3 +147,26 @@ jobs:
             echo "Build and Deploy workflow failed!"
             exit 1
           fi
+
+  trigger_kubernetes_deployment:
+    needs: trigger_build_and_deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Kubernetes Deployment Workflow
+        run: |
+          response=$(curl -X POST \
+            -H "Authorization: token ${{ secrets.PAT }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://github.com/madilshahzad/helm_charts/blob/main/.github/workflows/kubernetes-deployment.yaml/dispatches \
+            -d '{
+              "ref": "main",
+              "inputs": {
+                "image_tag": "${{ needs.trigger_build_and_deploy.outputs.IMAGE_TAG_DEPLOY }}",
+                "aws_role_arn": "${{ secrets.AWS_ROLE_ARN }}",
+                "aws_region": "${{ secrets.AWS_REGION }}",
+                "ecr_repository_name": "java-web-app",
+                "docker_repository": "${{ secrets.DOCKER_REPOSITORY }}"
+              }
+            }')
+
+          echo "Triggered Kubernetes Deployment Workflow"
