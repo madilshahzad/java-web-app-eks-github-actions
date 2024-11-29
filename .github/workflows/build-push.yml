@@ -95,10 +95,11 @@ jobs:
       - name: Install Trivy
         run: |
           curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+          echo "PATH=$PATH:~/bin" >> $GITHUB_ENV
 
       - name: Scan Docker Image with Trivy
         run: |
-          ./trivy image --severity HIGH,CRITICAL \
+          trivy image --severity HIGH,CRITICAL \
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${{ inputs.APP_NAME }}-${{ env.TAG }}
         continue-on-error: true
 

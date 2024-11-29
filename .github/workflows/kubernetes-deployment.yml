@@ -23,6 +23,10 @@ on:
         description: Docker image tag
         required: true
         type: string
+      ECR_REPOSITORY:
+        description: ECR Repository Name
+        required: true
+        type: string
     secrets:
       AWS_ACCOUNT_ID:
         required: true
@@ -64,7 +68,7 @@ jobs:
         working-directory: ./helm_charts/${{ inputs.HELM_CHART_PATH }}
         run: |
           helm upgrade --install ${{ inputs.HELM_RELEASE_NAME }} ./ \
-            --set image.repository=${{ inputs.IMAGE_REPOSITORY }} \
+            --set image.repository=${{ inputs.ECR_REPOSITORY }} \
             --set image.tag=${{ inputs.IMAGE_TAG }}
 
        
