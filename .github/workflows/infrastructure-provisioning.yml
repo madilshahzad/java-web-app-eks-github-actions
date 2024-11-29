@@ -25,6 +25,36 @@ on:
         required: true
       AWS_ACCOUNT_ID:
         required: true
+      NODE_ROLE_ARN:
+        required: true
+      MASTER_ROLE_ARN:
+        required: true
+      KEY_NAME:
+        required: true
+      USER_1_ARN:
+        required: true
+      USER_1_USERNAME:
+        required: true
+      USER_2_ARN:
+        required: true
+      USER_2_USERNAME:
+        required: true
+      CLUSTER_NAME:
+        required: true
+      CLUSTER_VERSION:
+        required: true
+      NODE_GROUP_NAME:
+        required: true
+      VPC_NAME:
+        required: true
+      BASTION_NAME:
+        required: true
+      KUBECONFIG_PATH:
+        required: true
+      CLUSTER_ALIAS:
+        required: true
+      AWS_Access_ROLE_ARN:
+        required: true
 
 jobs:
   tfsec-scan:
