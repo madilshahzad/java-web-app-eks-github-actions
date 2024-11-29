@@ -92,6 +92,12 @@ jobs:
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ inputs.APP_NAME }}-${{ env.TAG }}
 
+      - name: Scan Docker Image with Trivy
+        run: |
+          curl -sL https://raw.githubusercontent.com/aquasecurity/trivy/main/scripts/install.sh | sudo sh
+          trivy image --severity HIGH,CRITICAL \
+            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ inputs.APP_NAME }}-${{ env.TAG }}
+
       - name: Push Docker Image to ECR
         uses: docker/build-push-action@v5
         with:
