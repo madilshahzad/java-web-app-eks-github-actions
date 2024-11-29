@@ -135,7 +135,7 @@ jobs:
 
       - name: Terraform Init
         run: |
-          cd ./infrastructure-provisioning/terraform/environments/${{ inputs.TF_ENVIRONMENT }}
+          cd ./infrastructure-provisioning
           terraform init \
             -backend-config="region=${{ secrets.S3_AWS_REGION }}" \
             -backend-config="bucket=${{ secrets.TF_STATE_S3_BUCKET }}" \
@@ -145,11 +145,11 @@ jobs:
       - name: Terraform Plan
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          cd ./infrastructure-provisioning/terraform/environments/${{ inputs.TF_ENVIRONMENT }}
+          cd ./infrastructure-provisioning
           terraform plan -var-file=prod.tfvars
 
       - name: Terraform Apply
         if: ${{ github.event_name != 'pull_request' }}
         run: |
-          cd ./infrastructure-provisioning/terraform/environments/${{ inputs.TF_ENVIRONMENT }}
+          cd ./infrastructure-provisioning
           terraform apply -var-file=prod.tfvars -auto-approve
