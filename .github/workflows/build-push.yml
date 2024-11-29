@@ -92,14 +92,14 @@ jobs:
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ inputs.APP_NAME }}-${{ env.TAG }}
 
+      - name: Install Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+
       - name: Scan Docker Image with Trivy
         run: |
-          # Install Trivy
-          curl -sL https://raw.githubusercontent.com/aquasecurity/trivy/main/scripts/install.sh | sh
-          
-          # Scan the locally built Docker image
-          trivy image --severity HIGH,CRITICAL \
-            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ inputs.APP_NAME }}-${{ env.TAG }}
+          ./trivy image --severity HIGH,CRITICAL \
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${{ inputs.APP_NAME }}-${{ env.TAG }}
         continue-on-error: true
 
       - name: Push Docker Image to ECR
