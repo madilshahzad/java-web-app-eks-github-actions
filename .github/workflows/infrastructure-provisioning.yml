@@ -77,7 +77,7 @@ jobs:
         continue-on-error: true
         run: |
           cd infrastructure-provisioning
-          tfsec ./terraform/environments/${{ inputs.TF_ENVIRONMENT }}
+          tfsec infrastructure-provisioning/.
 
   provision-infrastructure:
     needs: tfsec-scan
