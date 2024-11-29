@@ -145,9 +145,11 @@ jobs:
       - name: Terraform Plan
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          terraform plan -var-file=./infrastructure-provisioning/terraform/environments/prod/prod.tfvars
+          cd ./infrastructure-provisioning
+          terraform plan -var-file=./terraform/environments/prod/prod.tfvars
 
       - name: Terraform Apply
         if: ${{ github.event_name != 'pull_request' }}
         run: |
-          terraform apply -var-file=./infrastructure-provisioning/terraform/environments/prod/prod.tfvars -auto-approve
+          cd ./infrastructure-provisioning
+          terraform apply -var-file=./terraform/environments/${{ inputs.TF_ENVIRONMENT }}/prod.tfvars -auto-approve
