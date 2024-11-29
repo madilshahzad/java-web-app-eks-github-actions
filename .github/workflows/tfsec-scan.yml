@@ -1,7 +1,7 @@
 name: Terraform Security Scan
 
 on:
-  workflow_call:
+  workflow_call: {}
   pull_request:
     paths:
       - '**/*.tf'
@@ -18,7 +18,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Run tfsec Security Scan
+      - name: Install tfsec
         run: |
-          curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
-          tfsec .
+          curl -Lo tfsec https://github.com/aquasecurity/tfsec/releases/latest/download/tfsec-linux-amd64
+          chmod +x tfsec
+          sudo mv tfsec /usr/local/bin/
+
+      - name: Run tfsec Security Scan
+        run: tfsec .
