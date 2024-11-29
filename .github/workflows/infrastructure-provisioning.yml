@@ -83,10 +83,13 @@ jobs:
     environment:
       name: ${{ inputs.TF_ENVIRONMENT }}
     steps:
+      - name: Clone Infrastructure Repository
+        run: git clone https://github.com/madilshahzad/infrastructure-provisioning.git
+
       - name: Generate `prod.tfvars` File
         run: |
-          mkdir -p ./terraform/environments/${{ inputs.TF_ENVIRONMENT }}
-          cat > ./terraform/environments/${{ inputs.TF_ENVIRONMENT }}/prod.tfvars <<'EOF'
+          mkdir -p ./infrastructure-provisioning/terraform/environments/${{ inputs.TF_ENVIRONMENT }}
+          cat > ./infrastructure-provisioning/terraform/environments/${{ inputs.TF_ENVIRONMENT }}/prod.tfvars <<'EOF'
           node_role_arn      = "${{ secrets.NODE_ROLE_ARN }}"
           master_role_arn    = "${{ secrets.MASTER_ROLE_ARN }}"
           key_name           = "${{ secrets.KEY_NAME }}"
@@ -116,12 +119,12 @@ jobs:
 
       - name: Verify `prod.tfvars` File
         run: |
-          if [ ! -f "./terraform/environments/${{ inputs.TF_ENVIRONMENT }}/prod.tfvars" ]; then
+          if [ ! -f "./infrastructure-provisioning/terraform/environments/${{ inputs.TF_ENVIRONMENT }}/prod.tfvars" ]; then
             echo "Error: prod.tfvars file is missing!"
             exit 1
           else
             echo "prod.tfvars file exists:"
-            cat ./terraform/environments/${{ inputs.TF_ENVIRONMENT }}/prod.tfvars
+            cat ./infrastructure-provisioning/terraform/environments/${{ inputs.TF_ENVIRONMENT }}/prod.tfvars
           fi
 
       - name: Configure AWS Credentials
@@ -132,6 +135,7 @@ jobs:
 
       - name: Terraform Init
         run: |
+          cd ./infrastructure-provisioning/terraform/environments/${{ inputs.TF_ENVIRONMENT }}
           terraform init \
             -backend-config="region=${{ secrets.S3_AWS_REGION }}" \
             -backend-config="bucket=${{ secrets.TF_STATE_S3_BUCKET }}" \
@@ -141,9 +145,11 @@ jobs:
       - name: Terraform Plan
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          terraform plan -var-file=./terraform/environments/${{ inputs.TF_ENVIRONMENT }}/prod.tfvars
+          cd ./infrastructure-provisioning/terraform/environments/${{ inputs.TF_ENVIRONMENT }}
+          terraform plan -var-file=prod.tfvars
 
       - name: Terraform Apply
         if: ${{ github.event_name != 'pull_request' }}
         run: |
-          terraform apply -var-file=./terraform/environments/${{ inputs.TF_ENVIRONMENT }}/prod.tfvars -auto-approve
+          cd ./infrastructure-provisioning/terraform/environments/${{ inputs.TF_ENVIRONMENT }}
+          terraform apply -var-file=prod.tfvars -auto-approve
