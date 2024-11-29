@@ -28,7 +28,17 @@ on:
 
 jobs:
   tfsec-scan:
-    uses: madilshahzad/reusable-template/.github/workflows/tfsec-scan.yml@main
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.TF_ENVIRONMENT }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Run tfsec Security Scan
+        run: |
+          curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+          tfsec ./terraform/environments/${{ inputs.TF_ENVIRONMENT }}
 
   provision-infrastructure:
     needs: tfsec-scan
