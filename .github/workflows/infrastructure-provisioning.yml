@@ -146,10 +146,10 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         run: |
           cd ./infrastructure-provisioning
-          terraform plan -var-file=prod.tfvars
+          terraform plan -var-file=./infrastructure-provisioning/terraform/environments/${{ inputs.TF_ENVIRONMENT }}/prod.tfvars
 
       - name: Terraform Apply
         if: ${{ github.event_name != 'pull_request' }}
         run: |
           cd ./infrastructure-provisioning
-          terraform apply -var-file=prod.tfvars -auto-approve
+          terraform apply -var-file=./infrastructure-provisioning/terraform/environments/${{ inputs.TF_ENVIRONMENT }}/prod.tfvars -auto-approve
