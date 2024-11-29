@@ -1,0 +1,23 @@
+name: Terraform Security Scan
+
+on:
+  pull_request:
+    paths:
+      - '**/*.tf'
+  workflow_dispatch: # Allow manual trigger for tfsec
+
+permissions:
+  contents: read
+
+jobs:
+  tfsec-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Run tfsec Security Scan
+        run: |
+          curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+          tfsec .
