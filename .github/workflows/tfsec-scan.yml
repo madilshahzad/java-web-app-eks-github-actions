@@ -1,6 +1,7 @@
 name: Terraform Security Scan
 
 on:
+  workflow_call:
   pull_request:
     paths:
       - '**/*.tf'
