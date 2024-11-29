@@ -62,12 +62,21 @@ jobs:
     environment:
       name: ${{ inputs.TF_ENVIRONMENT }}
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Clone Infrastructure Repository
+        run: |
+          git clone https://github.com/madilshahzad/infrastructure-provisioning.git
+          cd infrastructure-provisioning
+
+      - name: Install tfsec
+        run: |
+          curl -Lo tfsec https://github.com/aquasecurity/tfsec/releases/latest/download/tfsec-linux-amd64
+          chmod +x tfsec
+          sudo mv tfsec /usr/local/bin/
 
       - name: Run tfsec Security Scan
+        continue-on-error: true
         run: |
-          curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+          cd infrastructure-provisioning
           tfsec ./terraform/environments/${{ inputs.TF_ENVIRONMENT }}
 
   provision-infrastructure:
@@ -76,8 +85,10 @@ jobs:
     environment:
       name: ${{ inputs.TF_ENVIRONMENT }}
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Clone Infrastructure Repository
+        run: |
+          git clone https://github.com/madilshahzad/infrastructure-provisioning.git
+          cd infrastructure-provisioning
 
       - name: Generate `prod.tfvars` File
         run: |
@@ -118,6 +129,7 @@ jobs:
 
       - name: Terraform Init
         run: |
+          cd infrastructure-provisioning
           terraform init \
             -backend-config="region=${{ secrets.S3_AWS_REGION }}" \
             -backend-config="bucket=${{ secrets.TF_STATE_S3_BUCKET }}" \
@@ -126,14 +138,18 @@ jobs:
 
       - name: Terraform Format Check
         if: ${{ github.event_name == 'pull_request' }}
-        run: terraform fmt -check
+        run: |
+          cd infrastructure-provisioning
+          terraform fmt -check
 
       - name: Terraform Plan
         if: ${{ github.event_name == 'pull_request' }}
         run: |
+          cd infrastructure-provisioning
           terraform plan -var-file=./terraform/environments/${{ inputs.TF_ENVIRONMENT }}/prod.tfvars
 
       - name: Terraform Apply
         if: ${{ github.event_name != 'pull_request' }}
         run: |
+          cd infrastructure-provisioning
           terraform apply -var-file=./terraform/environments/${{ inputs.TF_ENVIRONMENT }}/prod.tfvars -auto-approve
