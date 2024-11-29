@@ -1,0 +1,75 @@
+name: Kubernetes Deployment
+
+on:
+  workflow_call:
+    inputs:
+      HELM_RELEASE_NAME:
+        description: Helm release name
+        required: true
+        type: string
+      HELM_CHART_PATH:
+        description: Path to the Helm chart directory
+        required: true
+        type: string
+      EKS_CLUSTER_NAME:
+        description: EKS Cluster Name
+        required: true
+        type: string
+      IMAGE_REPOSITORY:
+        description: Docker image repository
+        required: true
+        type: string
+      IMAGE_TAG:
+        description: Docker image tag
+        required: true
+        type: string
+    secrets:
+      AWS_ACCOUNT_ID:
+        required: true
+      AWS_REGION:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHub-Actions
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Update Kubeconfig for EKS
+        run: |
+          aws eks update-kubeconfig \
+            --region ${{ secrets.AWS_REGION }} \
+            --name ${{ inputs.EKS_CLUSTER_NAME }} \
+            --role-arn arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHub-Actions \
+            --alias eks-cluster
+
+      - name: Verify Cluster
+        run: kubectl get nodes
+
+      - name: Clone Helm Chart Repository
+        run: |
+          git clone https://github.com/madilshahzad/helm_charts.git
+          echo "Cloned Helm Chart Repository"
+
+      - name: Navigate to Helm Chart Directory
+        working-directory: ./helm_charts/${{ inputs.HELM_CHART_PATH }}
+        run: |
+          echo "Navigated to Helm Chart Directory"
+
+      - name: Deploy Using Helm
+        working-directory: ./helm_charts/${{ inputs.HELM_CHART_PATH }}
+        run: |
+          helm upgrade --install ${{ inputs.HELM_RELEASE_NAME }} ./ \
+            --set image.repository=${{ inputs.IMAGE_REPOSITORY }} \
+            --set image.tag=${{ inputs.IMAGE_TAG }}
+
+       
+      - name: Sleep for 5 seconds
+        run: sleep 5
+    
+      - name: Get Pod Status
+        run: kubectl get pods
