@@ -29,12 +29,12 @@ on:
 jobs:
   tfsec-scan:
     uses: madilshahzad/reusable-template/.github/workflows/tfsec-scan.yml@main
-    with:
-      TF_DIRECTORY: ./terraform/environments/${{ inputs.TF_ENVIRONMENT }}
 
   provision-infrastructure:
     needs: tfsec-scan
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.TF_ENVIRONMENT }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
