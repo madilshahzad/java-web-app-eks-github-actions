@@ -90,12 +90,12 @@ jobs:
           context: ${{ inputs.CONTEXT_PATH }}
           file: ${{ inputs.DOCKERFILE_PATH }}
           tags: |
-            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ inputs.APP_NAME }}-${{ env.TAG }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ env.TAG }}
 
       - name: Scan Docker Image with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ inputs.APP_NAME }}-${{ env.TAG }}
+          image-ref: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ env.TAG }}
           severity: HIGH,CRITICAL
           ignore-unfixed: true
 
