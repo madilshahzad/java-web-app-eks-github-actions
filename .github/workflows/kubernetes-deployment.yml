@@ -40,6 +40,7 @@ on:
       ROLE_NAME:
         description: Role name to assume
         required: true
+  
 
   
 
@@ -79,7 +80,7 @@ jobs:
         run: |
           helm upgrade --install ${{ inputs.HELM_RELEASE_NAME }} ./ \
             --set image.repository=${{ secrets.ECR_REPOSITORY_URL }} \
-            --set image.tag=${{inputs.APP_NAME}}-{{${{ inputs.IMAGE_TAG }}
+            --set image.tag=${{inputs.APP_NAME}}-${{ inputs.IMAGE_TAG }}
 
       - name: Wait for Pods to be Ready
         run: |
