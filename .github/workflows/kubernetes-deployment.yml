@@ -23,6 +23,11 @@ on:
         description: Docker image tag
         required: true
         type: string
+      APP_NAME:
+        description: Application Name
+        required: true
+        type: string
+        default: "java-web-app"
     secrets:
       AWS_ACCOUNT_ID:
         required: true
@@ -35,6 +40,8 @@ on:
       ROLE_NAME:
         description: Role name to assume
         required: true
+
+  
 
 jobs:
   deploy:
@@ -72,7 +79,7 @@ jobs:
         run: |
           helm upgrade --install ${{ inputs.HELM_RELEASE_NAME }} ./ \
             --set image.repository=${{ secrets.ECR_REPOSITORY_URL }} \
-            --set image.tag=${{ inputs.IMAGE_TAG }}
+            --set image.tag=${{inputs.APP_NAME}}/${{inputs.APP_NAME}}-{{${{ inputs.IMAGE_TAG }}
 
       - name: Wait for Pods to be Ready
         run: |
