@@ -43,7 +43,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ inputs.ROLE_NAME }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.ROLE_NAME }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Update Kubeconfig for EKS
@@ -51,7 +51,7 @@ jobs:
           aws eks update-kubeconfig \
             --region ${{ secrets.AWS_REGION }} \
             --name ${{ inputs.EKS_CLUSTER_NAME }} \
-            --role-arn arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ inputs.ROLE_NAME }} \
+            --role-arn arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.ROLE_NAME }} \
             --alias eks-cluster
 
       - name: Verify Cluster
