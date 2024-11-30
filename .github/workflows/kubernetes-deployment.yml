@@ -23,6 +23,10 @@ on:
         description: Docker image tag
         required: true
         type: string
+      ROLE_NAME:
+        description: Role name to assume
+        required: true
+        type: string
     secrets:
       AWS_ACCOUNT_ID:
         required: true
@@ -40,7 +44,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHub-Actions
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ inputs.ROLE_NAME }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Update Kubeconfig for EKS
@@ -48,7 +52,7 @@ jobs:
           aws eks update-kubeconfig \
             --region ${{ secrets.AWS_REGION }} \
             --name ${{ inputs.EKS_CLUSTER_NAME }} \
-            --role-arn arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHub-Actions \
+            --role-arn arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ inputs.ROLE_NAME }} \
             --alias eks-cluster
 
       - name: Verify Cluster
@@ -56,7 +60,7 @@ jobs:
 
       - name: Clone Helm Chart Repository
         run: |
-          git clone https://github.com/madilshahzad/helm_charts.git
+          git clone --branch main https://github.com/madilshahzad/helm_charts.git
           echo "Cloned Helm Chart Repository"
 
       - name: Navigate to Helm Chart Directory
@@ -71,8 +75,9 @@ jobs:
             --set image.repository=${{ secrets.ECR_REPOSITORY_URL }} \
             --set image.tag=${{ inputs.IMAGE_TAG }}
 
-      - name: Sleep for 10 seconds
-        run: sleep 10
+      - name: Wait for Pods to be Ready
+        run: |
+          kubectl wait --for=condition=ready pod --all --timeout=120s
 
       - name: Get Pod Status
-        run: kubectl get pods
+        run: kubectl get pods --namespace default

@@ -12,6 +12,10 @@ on:
         description: Terraform environment (e.g., dev, prod)
         required: true
         type: string
+      ROLE_NAME:
+        description: Role name to assume
+        required: true
+        type: string
     secrets:
       AWS_REGION:
         required: true
@@ -63,16 +67,16 @@ jobs:
       name: ${{ inputs.TF_ENVIRONMENT }}
     steps:
       - name: Clone Infrastructure Repository
-        run: git clone https://github.com/madilshahzad/infrastructure-provisioning.git
+        run: git clone --branch main https://github.com/madilshahzad/infrastructure-provisioning.git
 
       - name: Install tfsec
         run: |
           curl -Lo tfsec https://github.com/aquasecurity/tfsec/releases/latest/download/tfsec-linux-amd64
+          echo "2c7418f15e1f92b209dcdf2f97e3aef4b79b0f946d04df9ff8b5f56d4b4a2e1f  tfsec" | sha256sum -c -
           chmod +x tfsec
           sudo mv tfsec /usr/local/bin/
 
       - name: Run tfsec Security Scan
-        continue-on-error: true
         run: |
           cd infrastructure-provisioning
           tfsec .
@@ -84,7 +88,7 @@ jobs:
       name: ${{ inputs.TF_ENVIRONMENT }}
     steps:
       - name: Clone Infrastructure Repository
-        run: git clone https://github.com/madilshahzad/infrastructure-provisioning.git
+        run: git clone --branch main https://github.com/madilshahzad/infrastructure-provisioning.git
 
       - name: Generate `prod.tfvars` File
         run: |
@@ -130,7 +134,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHub-Actions
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ inputs.ROLE_NAME }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Terraform Init
@@ -146,10 +150,22 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         run: |
           cd ./infrastructure-provisioning
-          terraform plan -var-file=./terraform/environments/prod/prod.tfvars
+          terraform plan -var-file=./terraform/environments/${{ inputs.TF_ENVIRONMENT }}/prod.tfvars
 
       - name: Terraform Apply
-        if: ${{ github.event_name != 'pull_request' }}
+        if: ${{ github.event_name != 'pull_request' && inputs.TF_ENVIRONMENT != 'prod' }}
         run: |
           cd ./infrastructure-provisioning
           terraform apply -var-file=./terraform/environments/${{ inputs.TF_ENVIRONMENT }}/prod.tfvars -auto-approve
+
+      - name: Manual Approval for Production
+        if: ${{ github.event_name != 'pull_request' && inputs.TF_ENVIRONMENT == 'prod' }}
+        uses: hmarr/auto-approve-action@v2
+        with:
+          github-token: ${{ secrets.PAT }}
+
+      - name: Terraform Apply for Production
+        if: ${{ github.event_name != 'pull_request' && inputs.TF_ENVIRONMENT == 'prod' }}
+        run: |
+          cd ./infrastructure-provisioning
+          terraform apply -var-file=./terraform/environments/${{ inputs.TF_ENVIRONMENT }}/prod.tfvars
